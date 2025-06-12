@@ -3,14 +3,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../config/constants.dart';
 import '../config/enums.dart';
-import 'screens/home/home_screen.dart';
-import 'screens/menu_options/menu_options_screen.dart';
+import '/screens/home/home_screen.dart';
+import '/screens/menu_options/menu_options_screen.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({
-    Key? key,
+    super.key,
     required this.selectedMenu,
-  }) : super(key: key);
+  });
 
   final MenuState selectedMenu;
 
