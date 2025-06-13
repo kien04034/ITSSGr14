@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';  // Import từ latlong2
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_application_1/config/size_config.dart';
+
 import 'components/body.dart';
 
 class MapPickerScreen extends StatelessWidget {
   static String routeName = "/route_name";
 
-  // Tham số truyền vào từ bên ngoài khi gọi screen
-  final Function(LatLng _latLngSelected, String _addressSelected) onPlacePicked;
-  final LatLng? initialCameraPosition;
+  Function(LatLng _latLngSelected, String _addressSelected) onPlacePicked;
+  LatLng? initialCameraPosition;
 
   MapPickerScreen({
     required this.onPlacePicked,
@@ -18,7 +18,7 @@ class MapPickerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Khởi tạo kích thước màn hình (SizeConfig)
+    // You have to call it on your starting screen:
     SizeConfig().init(context);
 
     return Scaffold(
@@ -29,8 +29,8 @@ class MapPickerScreen extends StatelessWidget {
         ),
       ),
       body: Body(
-        onPlacePicked: onPlacePicked, // Truyền hàm callback chọn vị trí
-        initialCameraPosition: initialCameraPosition, // Vị trí bắt đầu (có thể là null)
+        onPlacePicked: onPlacePicked,
+        initialCameraPosition: initialCameraPosition,
       ),
     );
   }

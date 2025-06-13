@@ -1,53 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_application_1/helper/location_helper.dart';
 
-class MapImages extends StatelessWidget {
-  final double? latitude;
-  final double? longitude;
-
+class MapImages extends StatefulWidget {
   const MapImages({
     Key? key,
     required this.latitude,
     required this.longitude,
   }) : super(key: key);
 
+  final double? latitude;
+  final double? longitude;
+
   @override
-  Widget build(BuildContext context) {
-    if (latitude == null || longitude == null) {
-      return const Center(child: Text("Không có vị trí để hiển thị bản đồ."));
+  _MapImagesState createState() => _MapImagesState();
+}
+
+class _MapImagesState extends State<MapImages> {
+  String? _previewImageUrl;
+
+  void _showPreview(LatLng latLng) {
+    final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
+      latitude: latLng.latitude,
+      longitude: latLng.longitude,
+      width: 600,
+      height: 600,
+    );
+    setState(() {
+      _previewImageUrl = staticMapImageUrl;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (widget.latitude != null && widget.longitude != null) {
+      LatLng latLng = LatLng(widget.latitude!, widget.longitude!);
+      //LatLng latLng = const LatLng(18.731120, 105.662068);
+      _showPreview(latLng);
     }
 
-    final latLng = LatLng(latitude!, longitude!);
+    super.didChangeDependencies();
+  }
 
-    return SizedBox(
-      height: 300,
-      child: FlutterMap(
-        options: MapOptions(
-          center: latLng,
-          zoom: 15.0,
-        ),
-        children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'com.example.app',
-          ),
-          MarkerLayer(
-            markers: [
-              Marker(
-                point: latLng,
-                width: 40,
-                height: 40,
-                child: Icon(
-                  Icons.location_pin,
-                  color: Colors.red,
-                  size: 40,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+  @override
+  Widget build(BuildContext context) {
+    return _previewImageUrl == null
+        ? Container(
+            alignment: Alignment.center,
+            child: const Text('No Location Chosen'),
+          )
+        : FadeInImage.assetNetwork(
+            placeholder: "assets/images/placeholder_processing_map.gif",
+            image: _previewImageUrl!,
+            fit: BoxFit.cover,
+            //width: double.infinity,
+          );
   }
 }

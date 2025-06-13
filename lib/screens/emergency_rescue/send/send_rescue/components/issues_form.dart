@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart'; // Import LatLng từ latlong2
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_1/helper/keyboard.dart';
 import 'package:flutter_application_1/providers/issue_provider.dart';
@@ -19,7 +19,7 @@ import '/models/issue.dart';
 import '/screens/place/repair_place/repair_place_manage_add_edit/components/location_input.dart';
 
 class IssuesForm extends StatefulWidget {
-  Issue? issue;
+  Issue? issue; //Không cần truyền giá trị vào, vì chỉ create, ko update
 
   IssuesForm({Key? key}) : super(key: key);
 
@@ -28,19 +28,25 @@ class IssuesForm extends StatefulWidget {
 }
 
 class _IssuesFormState extends State<IssuesForm> {
-  Issue _issue = Issue();
+  Issue _issue = Issue(); //khởi tạo giá trị ban đầu, cập nhật ở initState()
   final _formKey = GlobalKey<FormState>();
 
   List<IssueCategory> issueCategories = IssueCategory.values;
 
+  //IssueCategory? issueCategorySelected;
+
   @override
   void initState() {
+    //Lấy giá trị từ widget.issue, nếu nó null thì khởi tạo :
     _issue = widget.issue ?? Issue();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    //widget.issue ??= Issue(); //Khởi tạo nếu null
+
     return Form(
       key: _formKey,
       child: Column(
@@ -75,6 +81,7 @@ class _IssuesFormState extends State<IssuesForm> {
           child: Text(value.name),
         );
       }).toList(),
+      //value: widget.issue!.category,
       onSaved: (newValue) => _issue.category = newValue,
       onChanged: (newValue) {
         setState(() {
@@ -114,6 +121,8 @@ class _IssuesFormState extends State<IssuesForm> {
       decoration: const InputDecoration(
         labelText: "Điện thoại",
         hintText: "Nhập số điện thoại của bạn",
+        // If  you are using latest version of flutter then lable text and hint text shown like this
+        // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Phone.svg"),
       ),
@@ -133,6 +142,8 @@ class _IssuesFormState extends State<IssuesForm> {
       decoration: const InputDecoration(
         labelText: "Mô tả địa chỉ hiện tại",
         hintText: "Nhập địa chỉ của bạn",
+        // If  you are using latest version of flutter then lable text and hint text shown like this
+        // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon:
             CustomSurffixIcon(svgIcon: "assets/icons/Location point.svg"),
@@ -156,6 +167,8 @@ class _IssuesFormState extends State<IssuesForm> {
       decoration: const InputDecoration(
         labelText: "Mô tả sự số",
         hintText: "Nhập mô tả chi tiết",
+        // If  you are using latest version of flutter then lable text and hint text shown like this
+        // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon:
             CustomSurffixIcon(svgIcon: "assets/icons/Chat bubble Icon.svg"),
@@ -243,6 +256,7 @@ class _IssuesFormState extends State<IssuesForm> {
             onCancel: () => _canceledByMember(context, issueReload),
           ),
         );
+        //Navigator.pop(context);
       }
     }
   }
